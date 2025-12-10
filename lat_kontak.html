@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kontak - Kopi Nusantara</title>
+    <link href="https://fonts.google.com/specimen/Trocchi?categoryFilters=Serif:%2FSerif%2FScotch" rel="stylesheet">
+    <link rel="stylesheet" href="lat_style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Efek animasi pada pesan */
+        #successMsg, #errorMsg {
+            transition: all 0.4s ease;
+            opacity: 0;
+        }
+        #successMsg.show, #errorMsg.show {
+            opacity: 1;
+        }
+
+        /* Area preview & tema */
+        .preview-area, .tema-area {
+            margin-top: 25px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #e9e1cf;
+        }
+        .tema-area {
+            text-align: center;
+        }
+    </style>
+    <script type="module" src="js/form.js"></script>
+    <script type="module" src="js/newsletter.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="images/logokopnus.png" alt="Logo UMKM" width="40" height="40"/>Kopi Nusantara
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="lat_index.html">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lat_tentang.html">Tentang Kami</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lat_produk.html">Produk</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lat_galeri.html">Galeri</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="lat_kontak.html">Kontak</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h2>Hubungi Kami</h2>
+            <p>Silakan isi formulir berikut untuk menghubungi tim <strong>Kopi Nusantara</strong>. Kami akan segera merespons pesan Anda.</p>
+        </div>
+    </header>
+
+    <div class="tema-area">
+        <label for="temaSelect"><strong>Pilih Tema Warna: </strong></label>
+        <select id="temaSelect">
+            <option value="#e9e1cf">Krem Latte</option>
+            <option value="#d7ccc8">Coklat Muda</option>
+            <option value="#c8e6c9">Hijau Daun</option>
+        </select>
+    </div>
+
+    <main>
+        <form id="formKontak" action="#" method="post">
+            <label for="nama">Nama:</label><br>
+            <input type="text" id="nama" name="nama" required /><br><br>
+
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" required /><br><br>
+
+            <label for="hp">Nomor HP:</label>
+            <input type="text" id="hp" name="hp" required /><br><br>
+
+            <label for="kategori">Kategori Pesan:</label><br>
+            <select id="kategori" name="kategori">
+                <option value="umum">Umum</option>
+                <option value="produk">Produk</option>
+                <option value="kerjasama">Kerja Sama</option>
+            </select><br><br>
+
+            <label for="pesan">Pesan:</label><br>
+            <textarea id="pesan" name="pesan" rows="5" cols="30"></textarea><br><br>
+
+            <input type="checkbox" id="langganan" name="langganan" value="ya">
+            <label for="langganan">Saya ingin menerima newsletter</label><br><br>
+
+            <fieldset>
+                <legend>Jenis Kelamin:</legend>
+                <label><input type="radio" name="gender" value="Pria"> Pria</label>
+                <label><input type="radio" name="gender" value="Wanita"> Wanita</label>
+            </fieldset><br><br>
+
+            <button type="submit">Kirim</button>
+            <button type="button" id="clearBtn">Clear Data</button>
+
+            <p id="errorMsg" style="color:red;"></p>
+            <p id="successMsg" style="color:green;"></p>
+        </form>
+
+        <div class="preview-area">
+            <h3>Preview Data Anda:</h3>
+            <p id="preview"></p>
+        </div>
+    </main>
+
+   
+
+    <footer>
+        <p>&copy; 2025 Kopi Nusantara</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("formKontak");
+            const nama = document.getElementById("nama");
+            const email = document.getElementById("email");
+            const hp = document.getElementById("hp");
+            const pesan = document.getElementById("pesan");
+            const errorMsg = document.getElementById("errorMsg");
+            const successMsg = document.getElementById("successMsg");
+            const clearBtn = document.getElementById("clearBtn");
+            const preview = document.getElementById("preview");
+            const temaSelect = document.getElementById("temaSelect");
+
+            // Validasi: hanya angka di nomor HP
+            hp.addEventListener("input", function () {
+                this.value = this.value.replace(/[^0-9]/g, "");
+            });
+
+            // Preview data real-time
+            form.addEventListener("input", function () {
+                preview.textContent = `Nama: ${nama.value || "-"} | Email: ${email.value || "-"} | HP: ${hp.value || "-"} | Pesan: ${pesan.value || "-"}`;
+            });
+
+            // Simpan ke localStorage
+            form.addEventListener("change", function () {
+                const data = {
+                    nama: nama.value,
+                    email: email.value,
+                    hp: hp.value,
+                    pesan: pesan.value
+                };
+                localStorage.setItem("formKopiNusantara", JSON.stringify(data));
+            });
+
+            // Muat ulang data dari localStorage
+            const dataSimpan = localStorage.getItem("formKopiNusantara");
+            if (dataSimpan) {
+                const d = JSON.parse(dataSimpan);
+                nama.value = d.nama || "";
+                email.value = d.email || "";
+                hp.value = d.hp || "";
+                pesan.value = d.pesan || "";
+                preview.textContent = `Nama: ${d.nama || "-"} | Email: ${d.email || "-"} | HP: ${d.hp || "-"} | Pesan: ${d.pesan || "-"}`;
+            }
+
+            // Validasi & kirim
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                errorMsg.classList.remove("show");
+                successMsg.classList.remove("show");
+
+                const emailValue = email.value.trim().toLowerCase();
+
+                // Validasi field kosong
+                if (nama.value === "" || email.value === "" || hp.value === "" || pesan.value === "") {
+                    errorMsg.textContent = "⚠️ Semua field wajib diisi.";
+                    errorMsg.classList.add("show");
+                    return;
+                }
+
+                // Validasi format email
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(emailValue)) {
+                    errorMsg.textContent = "⚠️ Format email tidak valid.";
+                    errorMsg.classList.add("show");
+                    return;
+                }
+
+                // Validasi domain: harus gmail.com
+                if (!emailValue.endsWith("@gmail.com")) {
+                    errorMsg.textContent = "⚠️ Hanya email @gmail.com yang diperbolehkan.";
+                    errorMsg.classList.add("show");
+                    return;
+                }
+
+                if (!valid) {
+                    event.preventDefault();
+                } else {
+                    //alert("Pesan berhasil dikirim!");
+                    //form.reset();
+                }
+
+                // Jika semua validasi lolos
+                localStorage.removeItem("formKopiNusantara");
+                errorMsg.textContent = "";
+                successMsg.textContent = "✅ Pesan berhasil dikirim! Terima kasih telah menghubungi Kopi Nusantara.";
+                successMsg.classList.add("show");
+                form.reset();
+                preview.textContent = "";
+            });
+
+
+            // Tombol Clear
+            clearBtn.addEventListener("click", function () {
+                form.reset();
+                preview.textContent = "";
+                errorMsg.textContent = "";
+                successMsg.textContent = "";
+                localStorage.removeItem("formKopiNusantara");
+            });
+
+            // Ubah tema warna
+            temaSelect.addEventListener("change", function () {
+                const warna = temaSelect.value;
+                document.body.style.backgroundColor = warna;
+                document.querySelector("main").style.backgroundColor = warna;
+                document.querySelector("footer").style.backgroundColor = warna;
+            });
+        });
+    </script>
+</html>
